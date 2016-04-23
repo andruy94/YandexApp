@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Исполнители</string>
+    <string name="Url">http://cache-default06e.cdn.yandex.net/download.cdn.yandex.net/mobilization-2016/artists.json</string>
+    <string name="dscr">Описание</string>
+    <string name="dir">/com.artistinfo/</string>
+    <string name="alb">%1$d альбомов, %2$d песен</string>
+    <string name="No_internet">Нет соединения</string>
+    <string name="msg">Данные обрабатываются</string>
+    <string name="genr">жанр: %1$s</string>
+    <string name="link">Сайт: %1$s</string>
+</resources>
