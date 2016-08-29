@@ -82,17 +82,18 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
         personViewHolder.name.setText(artistDscrList.get(i).name);
         personViewHolder.albums.setText(String.format(context.getString(R.string.alb),
                 artistDscrList.get(i).albums, artistDscrList.get(i).tracks));
-        personViewHolder.genres.setText(artistDscrList.get(i).genres);
+        personViewHolder.genres.setText(artistDscrList.get(i).genres.get(0));
         personViewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, infoAcivity.class);
                 intent.putExtra("Extra", artistDscrList.get(i));//упаковываем объект (Parceble) в интент
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
         if(MainActivity.isConnected(context)){// есть ли подключение
-        Picasso.with(context).load(artistDscrList.get(i).smallcover).into(personViewHolder.photo
+        Picasso.with(context).load(artistDscrList.get(i).cover.getSmallcover()).into(personViewHolder.photo
                 , new Callback() {// попытаемся скачать изображние
             @Override
             public void onSuccess() {// наша затея удалась сохраним изображение

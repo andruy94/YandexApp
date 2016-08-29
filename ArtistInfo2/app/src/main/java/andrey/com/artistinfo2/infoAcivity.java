@@ -51,7 +51,7 @@ public class infoAcivity extends AppCompatActivity implements View.OnClickListen
         textView.setText(artistDscr.description);
         getSupportActionBar().setTitle(artistDscr.name);
         if(MainActivity.isConnected(this)){
-        Picasso.with(this).load(artistDscr.bigcover).into(imageView, new Callback() {
+        Picasso.with(this).load(artistDscr.cover.getBigcover()).into(imageView, new Callback() {
             @Override
             public void onSuccess() {
                 try {// null если быстро выйдем

@@ -37,13 +37,13 @@ public class DBWorker {// методы для работы с бд
         ContentValues cv=new ContentValues();
         cv.put(DBHelper.TableColumn[0],artistDscr.id);
         cv.put(DBHelper.TableColumn[1],artistDscr.name);
-        cv.put(DBHelper.TableColumn[2],artistDscr.genres );
+        //cv.put(DBHelper.TableColumn[2],artistDscr.genres );
         cv.put(DBHelper.TableColumn[3],artistDscr.tracks);
         cv.put(DBHelper.TableColumn[4],artistDscr.albums);
         cv.put(DBHelper.TableColumn[5],artistDscr.link);
         cv.put(DBHelper.TableColumn[6],artistDscr.description);
-        cv.put(DBHelper.TableColumn[7], artistDscr.smallcover);
-        cv.put(DBHelper.TableColumn[8], artistDscr.bigcover);
+        cv.put(DBHelper.TableColumn[7], artistDscr.cover.getSmallcover());
+        cv.put(DBHelper.TableColumn[8], artistDscr.cover.getBigcover());
             return db.insert(DBHelper.TableName, null, cv);
 
     }
@@ -52,13 +52,13 @@ public class DBWorker {// методы для работы с бд
         ContentValues cv=new ContentValues();
         cv.put(DBHelper.TableColumn[0],artistDscr.id);
         cv.put(DBHelper.TableColumn[1],artistDscr.name);
-        cv.put(DBHelper.TableColumn[2],artistDscr.genres );
+        //cv.put(DBHelper.TableColumn[2],artistDscr.genres );
         cv.put(DBHelper.TableColumn[3],artistDscr.tracks);
         cv.put(DBHelper.TableColumn[4],artistDscr.albums);
         cv.put(DBHelper.TableColumn[5],artistDscr.link);
         cv.put(DBHelper.TableColumn[6],artistDscr.description);
-        cv.put(DBHelper.TableColumn[7], artistDscr.smallcover);
-        cv.put(DBHelper.TableColumn[8], artistDscr.bigcover);
+        cv.put(DBHelper.TableColumn[7], artistDscr.cover.getSmallcover());
+        cv.put(DBHelper.TableColumn[8], artistDscr.cover.getBigcover());
         return db.update(DBHelper.TableName, cv, DBHelper.TableColumn[0] + "= ?",
                 new String[]{artistDscr.id+""});
     }
@@ -73,13 +73,13 @@ public class DBWorker {// методы для работы с бд
                 int filenameColIndex = c.getColumnIndex(DBHelper.TableColumn[0]);
                 artistDscr.id = c.getInt(filenameColIndex);
                 artistDscr.name= c.getString(c.getColumnIndex(DBHelper.TableColumn[1]));
-                artistDscr.genres=c.getString(c.getColumnIndex(DBHelper.TableColumn[2]));
+               // artistDscr.genres=c.getString(c.getColumnIndex(DBHelper.TableColumn[2]));
                 artistDscr.albums=c.getInt(c.getColumnIndex(DBHelper.TableColumn[3]));
                 artistDscr.tracks=c.getInt(c.getColumnIndex(DBHelper.TableColumn[4]));
                 artistDscr.link=c.getString(c.getColumnIndex(DBHelper.TableColumn[5]));
                 artistDscr.description=c.getString(c.getColumnIndex(DBHelper.TableColumn[6]));
-                artistDscr.smallcover=c.getString(c.getColumnIndex(DBHelper.TableColumn[7]));
-                artistDscr.bigcover=c.getString(c.getColumnIndex(DBHelper.TableColumn[8]));
+                artistDscr.cover.setSmallcover(c.getString(c.getColumnIndex(DBHelper.TableColumn[7])));
+                artistDscr.cover.setBigcover(c.getString(c.getColumnIndex(DBHelper.TableColumn[8])));
                 artistDscrList.add(artistDscr);
             }while (c.moveToNext());
         }else {

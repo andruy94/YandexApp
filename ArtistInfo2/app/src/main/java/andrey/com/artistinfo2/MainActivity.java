@@ -34,25 +34,58 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
-    protected  DownloadTask downloadTask;
+    private DBWorker dbWorker;
+    //protected  DownloadTask downloadTask;
     private RecyclerView rv;
     public static String TAG="TAG";// для отсеживания логов
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context= getApplication();
         setContentView(R.layout.activity_main);
         rv=(RecyclerView)findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);//устанавливается, если списко не будет менять размер, для экномии памяти
-        downloadTask=new DownloadTask(this);
-        downloadTask.execute(getString(R.string.Url));
+        dbWorker=new DBWorker(this);
+        try {
+            dbWorker.open();
+        } catch (SQLException e) {
+            Log.e(MainActivity.TAG,e.toString());
+        }
+
+        //downloadTask=new DownloadTask(this);
+       // downloadTask.execute(getString(R.string.Url));
+
+        ServiceGenerator.getInstance().getArtistDscr().enqueue(new Callback<List<ArtistDscr>>() {
+            @Override
+            public void onResponse(Call<List<ArtistDscr>> call, Response<List<ArtistDscr>> response) {
+                ArrayList<ArtistDscr> artistDscrs=new ArrayList<>(response.body());
+                Collections.sort(artistDscrs);// отстортируем наш список по id, наверно id показывает в каком порядке были добавлены записи
+                RVAdapter adapter = new RVAdapter(artistDscrs,getApplicationContext());
+                rv.setAdapter(adapter);
+                //скоремм информацию о заугрзки
+                findViewById(R.id.progressBar2).setVisibility(View.INVISIBLE);
+                findViewById(R.id.textView).setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<ArtistDscr>> call, Throwable t) {
+                Log.e("TAG",t.toString());
+            }
+        });
     }
 
 
-    public class DownloadTask extends AsyncTask<String, List<ArtistDscr>, List<ArtistDscr>> {
+    /*public class DownloadTask extends AsyncTask<String, List<ArtistDscr>, List<ArtistDscr>> {
         private DBWorker dbWorker;
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -153,12 +186,12 @@ public class MainActivity extends AppCompatActivity {
             context.findViewById(R.id.textView).setVisibility(View.INVISIBLE);
         }
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_refresh:
-                if(downloadTask.getStatus()== AsyncTask.Status.FINISHED){//если идёт загрзку, то не смысла заново начинать
+                /*if(downloadTask.getStatus()== AsyncTask.Status.FINISHED){//если идёт загрзку, то не смысла заново начинать
                     rv.setAdapter(null);//скроем наш список и покажем загрузку
                     findViewById(R.id.progressBar2).setVisibility(View.VISIBLE);
                     findViewById(R.id.textView).setVisibility(View.VISIBLE);
@@ -166,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     downloadTask.execute(getString(R.string.Url));
                 }else
                     Toast.makeText(this,getString(R.string.msg),Toast.LENGTH_SHORT).show();
-                    return true;
+                    return true;*/
         }
         return super.onOptionsItemSelected(item);
     }
